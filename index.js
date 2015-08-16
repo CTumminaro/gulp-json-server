@@ -11,7 +11,8 @@ module.exports = function(options) {
 	options = extend({
 		hostname: 'localhost',
 		port: 3000,
-		watch: false
+		watch: false,
+		routes: {}
 	}, (options || {}));
 
 	var stream = through.obj(function(file, enc, callback) {
@@ -35,6 +36,7 @@ module.exports = function(options) {
 	  }
 
 		server.use(jsonServer.defaults)
+			.use(jsonServer.rewriter(options.routes))
 			.use(router)
 			.listen(options.port, options.hostname)
 			.on('listening', function() {
